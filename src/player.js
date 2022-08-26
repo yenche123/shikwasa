@@ -116,7 +116,6 @@ class Player {
     this.ui.muteBtn.addEventListener('click', () => {
       const newMute = !this.muted
       this.muted = newMute
-      this.ui.setMute(newMute)
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
@@ -128,7 +127,6 @@ class Player {
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
       this.playbackRate = index + 1 >= speedRange.length ? speedRange[0] : speedRange[index + 1]
-      this.ui.setSpeed(this.playbackRate)
     })
   }
 
