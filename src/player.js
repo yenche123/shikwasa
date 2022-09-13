@@ -111,29 +111,44 @@ class Player {
 
   initControlEvents() {
     this.ui.playBtn.addEventListener('click', () => {
+      if(!this.canClickContinue("play_or_pause")) return
       this.toggle()
     })
     this.ui.muteBtn.addEventListener('click', () => {
+      if(!this.canClickContinue("mute")) return
       const newMute = !this.muted
       this.muted = newMute
     })
     this.ui.fwdBtn.addEventListener('click', () => {
+      if(!this.canClickContinue("forward")) return
       this.seekBySpan()
     })
     this.ui.bwdBtn.addEventListener('click', () => {
+      if(!this.canClickContinue("backward")) return
       this.seekBySpan({ forward: false })
     })
     this.ui.speedBtn.addEventListener('click', () => {
+      if(!this.canClickContinue("speed")) return
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
       this.playbackRate = index + 1 >= speedRange.length ? speedRange[0] : speedRange[index + 1]
     })
   }
 
+  canClickContinue(target) {
+    const onBeforeClick = this.options.onBeforeClick
+    if(!onBeforeClick || typeof onBeforeClick !== "function") return true
+    const res = onBeforeClick(target)
+    if(res === false) return false
+    return true
+  }
+
   initBarEvents() {
     let targetTime = 0
     const dragStartHandler = (e) => {
       if (!this.seekable) return
+      if(!this.canClickContinue("seek")) return
+
       e.preventDefault()
       this.el.setAttribute('data-seeking', '')
       this._dragging = true
@@ -141,9 +156,11 @@ class Player {
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
+      if(!this.canClickContinue("seek")) return
       this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
     }
     const dragEndHandler = (e) => {
+      if(!this.canClickContinue("seek")) return
       e.preventDefault()
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
@@ -158,6 +175,7 @@ class Player {
     // seeking with keyboard
     const keydownHandler = (e) => {
       if (!this.seekable) return
+      if(!this.canClickContinue("seek")) return
 
       // for early browser compatibility
       const key = e.key.replace('Arrow', '')

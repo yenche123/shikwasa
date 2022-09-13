@@ -326,6 +326,18 @@ download: true
 download: 'data:audio/mp3;base64,...'
 ```
 
+### onBeforeClick(target)
+
+点击播放器上的按钮时，执行该回调，若返回 `false` 则阻断用户该操作
+
+`target` 有以下值:
+- `play_or_pause`: 播放或暂停按钮
+- `mute`: 静音按钮
+- `forward`: 快进按钮
+- `backward`: 后退按钮
+- `speed`: 速率调整按钮
+- `seek`: 拖动进度条按钮
+
 ### parser
 
 (Optional) To focus on the player itself as well as to maintain Shikwasa as efficient as possible, we don't extract data from audio files. If you don't have control over the chapter data but would like to implement chapter feature, we support using [`jsmediatags`](https://github.com/aadsm/jsmediatags) as an external parser to parse the current audio's metadata.
